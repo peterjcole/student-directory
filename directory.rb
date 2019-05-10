@@ -20,7 +20,7 @@ def input_students
   puts_centered("Please enter the names of the students, then their cohort, then their hobbies, separated by a comma")
   puts_centered("To finish, just hit return twice")
 
-  input = gets.chomp
+  input = STDIN.gets.chomp
 
   until input.empty? do
     student = input.split(',', 3).map(&:lstrip)
@@ -30,7 +30,7 @@ def input_students
     else
       puts_centered("You didn't input the right number of things! Try again")
     end
-    input = gets.chomp
+    input = STDIN.gets.chomp
   end
 
 end
@@ -66,7 +66,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -77,9 +77,11 @@ def process(selection)
   when "2"
     show_students
   when "3"
-    save_students
+    puts_centered("Enter filename.")
+    save_students(STDIN.gets.chomp)
   when "4"
-    load_students
+    puts_centered("Enter filename.")
+    load_students(STDIN.gets.chomp)
   when "9"
     exit
   else
@@ -90,8 +92,8 @@ end
 def print_menu
   puts_centered("1. Input the students")
   puts_centered("2. Show the students")
-  puts_centered("3. Save the list to students.csv")
-  puts_centered("4. Load the list from students.csv")
+  puts_centered("3. Save the list to a file")
+  puts_centered("4. Load the list from a file")
   puts_centered("9. Exit")
 end
 
@@ -102,14 +104,27 @@ def show_students
   print_footer
 end
 
-def save_students
-  file = File.open("students.csv", "w")
+def save_students(filename)
+  file = File.open(filename, "w")
   file.puts(@students.to_yaml)
   file.close
 end
 
-def load_students
-  @students = YAML.load_file("students.csv")
+def load_students(filename = "students.csv")
+  @students = YAML.load_file(filename)
+  puts_centered "Loaded #{@students.count} students from #{filename}."
 end
 
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+  else
+    puts_centered "Sorry, #{filename} doesn't exist"
+    exit
+  end
+end
+
+try_load_students
 interactive_menu
