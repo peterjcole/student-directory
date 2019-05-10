@@ -12,6 +12,8 @@
 #    {name: "Norman Bates", cohort: :november, hobbies: ""}
 # ]
 
+require 'yaml'
+
 @students = []
 
 def input_students
@@ -76,6 +78,8 @@ def process(selection)
     show_students
   when "3"
     save_students
+  when "4"
+    load_students
   when "9"
     exit
   else
@@ -87,6 +91,7 @@ def print_menu
   puts_centered("1. Input the students")
   puts_centered("2. Show the students")
   puts_centered("3. Save the list to students.csv")
+  puts_centered("4. Load the list from students.csv")
   puts_centered("9. Exit")
 end
 
@@ -99,8 +104,12 @@ end
 
 def save_students
   file = File.open("students.csv", "w")
-  @students.each { |student| file.puts(student.to_s) }
+  file.puts(@students.to_yaml)
   file.close
+end
+
+def load_students
+  @students = YAML.load_file("students.csv")
 end
 
 interactive_menu
