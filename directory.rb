@@ -14,18 +14,17 @@ students = [
 ]
 
 def input_students
-  puts "Please enter the names of the students, then their hobbies, separated by a comma"
-  puts "To finish, just hit return twice"
+  print_centered("Please enter the names of the students, then their cohort, then their hobbies, separated by a comma")
+  print_centered("To finish, just hit return twice")
 
   students = []
 
   input = gets.chomp
 
   until input.empty? do
-    student = input.split(',', 2).map(&:lstrip)
-    puts student
-    students << {name: student[0], cohort: :november, hobbies: student[1]}
-    puts "Now we have #{students.count} students"
+    student = input.split(',', 3).map(&:lstrip)
+    students << {name: student[0], cohort: student[1].to_sym, hobbies: student[2]}
+    print_centered("Now we have #{students.count} students")
     input = gets.chomp
   end
 
@@ -34,16 +33,20 @@ end
   
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  print_centered("The students of Villains Academy")
+  print_centered("-------------")
 end
 
 def print(students)
-  students.each.with_index { |student, index| puts "#{index + 1}: #{student[:name]} (#{student[:cohort]} cohort). Hobbies include: #{student[:hobbies]}"}
+  students.each.with_index { |student, index| print_centered("#{index + 1}: #{student[:name]} (#{student[:cohort]} cohort). Hobbies include: #{student[:hobbies]}")}
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} excellent students"
+  print_centered("Overall, we have #{names.count} excellent students")
+end
+
+def print_centered(text)
+  puts text.slice!(0, 50).center(75) while text.length > 0
 end
 
 students = input_students
