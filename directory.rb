@@ -1,30 +1,32 @@
 student_count = 11
 students = [
-   {name: "Dr Hannibal Lecter", cohort: :november},
-   {name: "Darth Vader", cohort: :november},
-   {name: "Nurse Ratched", cohort: :november},
-   {name: "Michael Corleone", cohort: :november},
-   {name: "Alex DeLarge", cohort: :november},
-   {name: "The Wicked Witch of the West", cohort: :november},
-   {name: "Terminator", cohort: :november},
-   {name: "Freddy Krueger", cohort: :november},
-   {name: "The Joker", cohort: :november},
-   {name: "Joffrey Baratheon", cohort: :november},
-   {name: "Norman Bates", cohort: :november}
+   {name: "Dr Hannibal Lecter", cohort: :november, hobbies: "Murder, cannibalism, mind tricks"},
+   {name: "Darth Vader", cohort: :november, hobbies: "Lightsaber practice"},
+   {name: "Nurse Ratched", cohort: :november, hobbies: "Something"},
+   {name: "Michael Corleone", cohort: :november, hobbies: "Something else"},
+   {name: "Alex DeLarge", cohort: :november, hobbies: "None"},
+   {name: "The Wicked Witch of the West", cohort: :november, Hobbies: "Witchery"},
+   {name: "Terminator", cohort: :november, hobbies: "Being awesome"},
+   {name: "Freddy Krueger", cohort: :november, hobbies: "Dunno"},
+   {name: "The Joker", cohort: :november, hobbies: "Facepaint"},
+   {name: "Joffrey Baratheon", cohort: :november, hobbies: "Being rubbish"},
+   {name: "Norman Bates", cohort: :november, hobbies: ""}
 ]
 
 def input_students
-  puts "Please enter the names of the students"
+  puts "Please enter the names of the students, then their hobbies, separated by a comma"
   puts "To finish, just hit return twice"
 
   students = []
 
-  name = gets.chomp
+  input = gets.chomp
 
-  until name.empty? do
-    students << {name: name, cohort: :november}
+  until input.empty? do
+    student = input.split(',', 2).map(&:lstrip)
+    puts student
+    students << {name: student[0], cohort: :november, hobbies: student[1]}
     puts "Now we have #{students.count} students"
-    name = gets.chomp
+    input = gets.chomp
   end
 
   students
@@ -37,7 +39,7 @@ def print_header
 end
 
 def print(students)
-  students.each { |student | puts "#{student[:name]} (#{student[:cohort]} cohort)"}
+  students.each.with_index { |student, index| puts "#{index + 1}: #{student[:name]} (#{student[:cohort]} cohort). Hobbies include: #{student[:hobbies]}"}
 end
 
 def print_footer(names)
