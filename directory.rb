@@ -37,12 +37,22 @@ def print_header
   print_centered("-------------")
 end
 
-def print(students)
+def print_list(students)
+  print_centered("Student list:")
   students.each.with_index { |student, index| print_centered("#{index + 1}: #{student[:name]} (#{student[:cohort]} cohort). Hobbies include: #{student[:hobbies]}")}
 end
 
-def print_footer(names)
-  print_centered("Overall, we have #{names.count} excellent students")
+def print_by_cohort(students)
+  print_centered("Students by cohort:")
+  cohorts = students.map { |student| student[:cohort] }
+  cohorts.each do |cohort|
+    print_centered("#{cohort} cohort:")
+    students.filter { |student| student[:cohort] == cohort }.each.with_index { |student, index| print_centered("#{index + 1}: #{student[:name]}. Hobbies include: #{student[:hobbies]}")}
+  end
+end
+
+def print_footer(students)
+  print_centered("Overall, we have #{students.count} excellent students")
 end
 
 def print_centered(text)
@@ -51,5 +61,6 @@ end
 
 students = input_students
 print_header
-print(students)
+print_list(students)
+print_by_cohort(students)
 print_footer(students)
